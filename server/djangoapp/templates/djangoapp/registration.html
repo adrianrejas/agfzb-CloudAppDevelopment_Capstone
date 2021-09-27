@@ -2,10 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Dealership Review</title>
     {% load static %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
     <body>
-    <!--Add a registration form here -->
+        <form action="{% url 'djangoapp:register' %}" method="post">
+            <div class="container"> 
+                {% csrf_token %}
+                <h1>Sign Up</h1>
+                <hr>
+                <div class="form-group mt-2">
+                    <label for="username" class="mt-1"><b>User Name</b></label>
+                    <input type="text" class="form-control" placeholder="Enter User Name: " name="username" required>
+                    <label for="firstname" class="mt-1"><b>First Name</b></label>
+                    <input type="text" class="form-control" placeholder="Enter First Name: " name="firstname" required> 
+                    <label for="lastname" class="mt-1"><b>Last Name</b></label>
+                    <input type="text" class="form-control" placeholder="Enter Last Name: " name="lastname" required> 
+                    <label for="psw" class="mt-1"><b>Password</b></label>
+                    <input type="password" class="form-control" placeholder="Enter Password: " name="psw" required> 
+                    {% if message %}
+                    <div class="alert alert-warning mt-2"> 
+                        {{ message }}
+                    </div>
+                    {% endif %}
+                    <button class="btn btn-primary mt-2" type="submit">Sign up</button>
+                </div>
+            </div>
+        </form>
     </body>
 </html>

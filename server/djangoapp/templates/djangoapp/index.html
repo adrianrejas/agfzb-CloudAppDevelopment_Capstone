@@ -32,7 +32,7 @@
                                 <input type="text" class="form-control" placeholder="Username" name="username" >
                                 <input type="password" class="form-control" placeholder="Password" name="psw" >
                                 <button class="btn btn-primary" type="submit">Login</button>
-                                <a class="btn btn-link" href="">Sign Up</a>
+                                <a class="btn btn-link" href="{% url 'djangoapp:register' %}">Sign Up</a>
                             </div>
                         </form>
                     {% endif %}
@@ -41,12 +41,12 @@
         </div>
     </nav>
     
-    {% if request.session.error_login %}     
+    {% if error_login %}     
         <div class="alert alert-danger">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true" style="font-size:20px">×</span>
             </button>
-            {{request.session.error_login}}
+            <strong>Login failed!</strong> {{error_login}}
         </div>
     {% endif %}
 
