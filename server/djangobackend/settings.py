@@ -27,8 +27,7 @@ DEBUG = True
 
 APPEND_SLASH = True
 
-ALLOWED_HOSTS = ["localhost"]
-
+ALLOWED_HOSTS = ['localhost', 'arejas-djangoapp.eu-gb.mybluemix.net']
 
 # Application definition
 
