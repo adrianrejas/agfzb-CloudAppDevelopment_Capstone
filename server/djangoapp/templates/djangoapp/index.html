@@ -22,13 +22,33 @@
             </div>
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a class="btn btn-link" href="about">About us</a>
-                    <a class="btn btn-link" href="contact">Contact us</a>
+                    {% if user.is_authenticated %}
+                        <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
+                        <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
+                    {% else %}
+                        <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Username" name="username" >
+                                <input type="password" class="form-control" placeholder="Password" name="psw" >
+                                <button class="btn btn-primary" type="submit">Login</button>
+                                <a class="btn btn-link" href="">Sign Up</a>
+                            </div>
+                        </form>
+                    {% endif %}
                 </li>
             </ul>
         </div>
     </nav>
-
+    
+    {% if request.session.error_login %}     
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true" style="font-size:20px">×</span>
+            </button>
+            {{request.session.error_login}}
+        </div>
+    {% endif %}
 
     <!--Add a dealer table here -->
 
