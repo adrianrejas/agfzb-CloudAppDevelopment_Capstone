@@ -22,7 +22,10 @@ class CarMake(models.Model):
 # - __str__ method to print a car make object
 class CarModel(models.Model):
     car_make = models.ForeignKey(CarMake, null=False, on_delete=models.CASCADE)
-    dealer_id = models.IntegerField(default=0)
+    # Dealer ID has been defined as a chstringar both here and in the IBM clodclud functions
+    # This has been a deliberate change in order to take advantage of the autogeneration of ID
+    # done by Cloudant database
+    dealer_id = models.CharField(null=False, max_length=30, default='undefined')
     name = models.CharField(null=False, max_length=30, default='undefined')
     COUPE = 'Coupe'
     SEDAN = 'Sedan'
@@ -52,6 +55,21 @@ class CarModel(models.Model):
                 str(self.yearpublished()) + " " + self.type
 
 # <HINT> Create a plain Python class `CarDealer` to hold dealer data
+class CarDealer:
 
+    def __init__(self, id, short_name, full_name, address, city, st, state, zip, lat, long):
+        self.id = id
+        self.short_name = short_name
+        self.full_name = full_name
+        self.address = address
+        self.city = city
+        self.st = st
+        self.state = state
+        self.zip = zip
+        self.lat = lat
+        self.long = long
+
+    def __str__(self):
+        return "Dealer name: " + self.full_name
 
 # <HINT> Create a plain Python class `DealerReview` to hold review data
