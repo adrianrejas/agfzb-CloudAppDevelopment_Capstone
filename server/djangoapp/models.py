@@ -22,8 +22,8 @@ class CarMake(models.Model):
 # - __str__ method to print a car make object
 class CarModel(models.Model):
     car_make = models.ForeignKey(CarMake, null=False, on_delete=models.CASCADE)
-    # Dealer ID has been defined as a chstringar both here and in the IBM clodclud functions
-    # This has been a deliberate change in order to take advantage of the autogeneration of ID
+    # Dealer ID has been defined as a string both here and in the IBM clodclud functions
+    # This has been a deliberate change in order to take advantage of the autogeneration of IDs
     # done by Cloudant database
     dealer_id = models.CharField(null=False, max_length=30, default='undefined')
     name = models.CharField(null=False, max_length=30, default='undefined')
@@ -56,8 +56,10 @@ class CarModel(models.Model):
 
 # <HINT> Create a plain Python class `CarDealer` to hold dealer data
 class CarDealer:
-
     def __init__(self, id, short_name, full_name, address, city, st, state, zip, lat, long):
+        # Dealer ID has been defined as a string both here and in the IBM clodclud functions
+        # This has been a deliberate change in order to take advantage of the autogeneration of IDs
+        # done by Cloudant database
         self.id = id
         self.short_name = short_name
         self.full_name = full_name
@@ -73,3 +75,22 @@ class CarDealer:
         return "Dealer name: " + self.full_name
 
 # <HINT> Create a plain Python class `DealerReview` to hold review data
+class DealerReview:
+    def __init__(self, id, name, review, purchase, car_make, car_model, car_year, purchase_date):
+        # Dealer ID has been defined as a string both here and in the IBM clodclud functions
+        # This has been a deliberate change in order to take advantage of the autogeneration of IDs
+        # done by Cloudant database
+        self.id = id
+        self.name = name
+        self.review = review
+        self.purchase = purchase
+        self.car_make = car_make
+        self.car_model = car_model
+        self.car_year = car_year
+        self.purchase_date = purchase_date
+
+    def setSentiment(sentiment):
+        self.sentiment = sentiment
+
+    def __str__(self):
+        return "Dealer name: " + self.full_name
