@@ -108,12 +108,11 @@ def get_dealer_reviews_from_cf (url, dealerId):
         # For each review object
         for review in reviews:
             # Create a DealerReview object with values in object
-            car_make = (typeof(review["car_make"]) != 'undefined') ? review["car_make"] : None
             review_obj = DealerReview( id=review["id"], name=review["name"], review=review["review"],
-                                   purchase=review["purchase"], car_make=review["car_make"],
-                                   car_model=review["car_model"], car_year=review["car_year"],
-                                   purchase_date=review["purchase_date"])
-            results.append(review)
+                                   purchase=review["purchase"], car_make=review.get("car_make", None), 
+                                   car_model=review.get("car_model", None), car_year=review.get("car_year", None),
+                                   purchase_date=review.get("purchase_date", None))
+            info.append(review_obj)
     elif json_result:
         result = json_result["message"]
     else:

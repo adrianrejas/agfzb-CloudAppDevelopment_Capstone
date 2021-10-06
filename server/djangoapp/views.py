@@ -105,17 +105,19 @@ def get_dealerships(request):
             # Return error
             return HttpResponse(status)
 
+import json
 # Create a `get_dealer_details` view to render the reviews of a dealer
 def get_dealer_details(request, dealer_id):
     if request.method == "GET":
         url = "https://8ce99a88.eu-gb.apigw.appdomain.cloud/api/review"
         # Get reviews from the URL
         reviews, status = get_dealer_reviews_from_cf(url, dealer_id)
+        print(reviews)
         if status == "ok":
             # Concat all dealer's short name
-            review_names, status = '<br> '.join([review.review for review in reviews])
+            review_names = '<br> '.join([(review.name + ": " + review.review) for review in reviews])
             # Return a list of dealer short name
-            return HttpResponse(dealer_names)
+            return HttpResponse(review_names)
         else:
             # Return error
             return HttpResponse(status)
