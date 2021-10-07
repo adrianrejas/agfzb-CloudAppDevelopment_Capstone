@@ -22,6 +22,8 @@
             </div>
             <ul class="nav navbar-nav navbar-right">
                 <li>
+                    <a class="btn btn-link" href="about">About us</a>
+                    <a class="btn btn-link" href="contact">Contact us</a>
                     {% if user.is_authenticated %}
                         <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
                         <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
@@ -51,7 +53,46 @@
     {% endif %}
 
     <!--Add a dealer table here -->
+    {% if result != "ok" %}     
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true" style="font-size:20px">×</span>
+            </button>
+            <strong>Dealership request failed!</strong> {{result}}
+        </div>
+    {% else %}
+        <table class="table" id="table" data-filter-control="true">
+            <thead>
+                <tr>
+                    <th data-field="id">ID</th>
+                    <th data-field="name">Name</th>
+                    <th data-field="city">City</th>
+                    <th data-field="address">Address</th>                
+                    <th data-field="zip">Zip code</th>
+                    <th data-field="state" data-filter-control="select">State</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dealer in dealerships %}
+                    <tr>
+                        <td>{{dealer.id}}</td>
+                        <td><a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{val.full_name}}{{dealer.full_name}}</a></td>
+                        <td>{{dealer.city}}</td>
+                        <td>{{dealer.address}}</td>                    
+                        <td>{{dealer.zip}}</td>
+                        <td>{{dealer.st}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
     </body>
+
+    <script>
+        $(function() {
+            $('#table').bootstrapTable()
+        })
+    </script>
 
 </html>
