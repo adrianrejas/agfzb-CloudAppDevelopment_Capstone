@@ -10,6 +10,7 @@ env:
   IBM_CLOUD_ORG: adrianrejas@gmail.com
   MANIFEST_NAME: manifest.yml
   IBM_CLOUD_API: ${{secrets.IBM_CLOUD_API_KEY}}
+  WATSON_NLU_API_KEY: ${{secrets.WATSON_NLU_API_KEY}}
 
 defaults:
   run:
@@ -40,6 +41,10 @@ jobs:
         shell: bash
       - name: List all applications
         run: ibmcloud cf apps
+        shell: bash
+      - name: Create file with secrets
+        run:  |
+          echo 'WATSON_NLU_API_KEY="$WATSON_NLU_API_KEY"' > ./djangoapp/apy_settings.py
         shell: bash
       - name: Deploy manifest file
         run: ibmcloud cf push -f ./$MANIFEST_NAME
