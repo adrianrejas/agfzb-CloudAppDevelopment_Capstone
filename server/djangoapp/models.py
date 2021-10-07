@@ -76,7 +76,7 @@ class CarDealer:
 
 # <HINT> Create a plain Python class `DealerReview` to hold review data
 class DealerReview:
-    def __init__(self, id, name, review, purchase, car_make, car_model, car_year, purchase_date):
+    def __init__(self, id, name, review, purchase, car_make, car_model, car_year, purchase_date, sentiment):
         # Dealer ID has been defined as a string both here and in the IBM clodclud functions
         # This has been a deliberate change in order to take advantage of the autogeneration of IDs
         # done by Cloudant database
@@ -88,8 +88,6 @@ class DealerReview:
         self.car_model = car_model
         self.car_year = car_year
         self.purchase_date = purchase_date
-
-    def setSentiment(sentiment):
         self.sentiment = sentiment
 
     def __str__(self):
