@@ -44,7 +44,7 @@ jobs:
         shell: bash
       - name: Create file with secrets
         run:  |
-          echo 'WATSON_NLU_API_KEY="$WATSON_NLU_API_KEY"' > ./djangoapp/apy_settings.py
+          echo "WATSON_NLU_API_KEY=\"${WATSON_NLU_API_KEY}\"" > ./djangoapp/api_settings.py
         shell: bash
       - name: Deploy manifest file
         run: ibmcloud cf push -f ./$MANIFEST_NAME
