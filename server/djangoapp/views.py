@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
-from .models import CarDealer, DealerReview
+from .models import CarModel, CarDealer, DealerReview
 from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf, get_dealer_by_id, post_request
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -137,7 +137,7 @@ def add_review(request, dealer_id):
         context["dealer"]=dealer
         context["result"]=dealer_status
         # Get cars available at dealer and add result to the context
-        cars= CarModel.objects.all().filter(dealer_id=dealer_id)
+        cars= CarModel.objects.all()
         context['cars'] = cars
         # Render template
         return render(request, 'djangoapp/add_review.html', context)   
