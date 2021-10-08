@@ -10,7 +10,75 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
 
 </head>
+
     <body>
-    <!--Add review form here -->
+
+        <script>
+            function purchaseCheckboxChanged()
+            {
+                if($('#purchasecheck').is(":checked"))   
+                    $("#purchasedata").show();
+                else
+                    $("#purchasedata").hide();
+            }
+        </script>
+        
+        <nav class="navbar navbar-light bg-light">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Best cars dealership</a>
+                    <a class="btn btn-link" href="about">About us</a>
+                    <a class="btn btn-link" href="contact">Contact us</a>
+                    </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        {% if user.is_authenticated %}
+                            <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
+                            <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
+                        {% else %}
+                            <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+                                {% csrf_token %}
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Username" name="username" >
+                                    <input type="password" class="form-control" placeholder="Password" name="psw" >
+                                    <button class="btn btn-primary" type="submit">Login</button>
+                                    <a class="btn btn-link" href="{% url 'djangoapp:register' %}">Sign Up</a>
+                                </div>
+                            </form>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+        <button> <a href="{% url 'djangoapp:dealer_details' dealer_id=dealer_id %}" ><h5>Back to reviews</h5> </a> </button>
+        <h2  class="mt-5 ml-5 mr-5">Add review about {{ dealer.full_name }}</h2>
+        
+        <form action="{% url 'djangoapp:add_review' dealer_id%}" method="post">
+            <div class="container m-5"> 
+                {% csrf_token %}
+                <h1>Sign Up</h1>
+                <hr>
+                <div class="form-group mt-2">
+                    <label for="content" class="mt-1"><b>Write review content:</b></label>
+                    <textarea class="form-control" id="content" name="content" rows="2" required></textarea>
+                    <label for="purchasecheck" class="mt-1"><b>Check if a car was purchased </b></label>
+                    <input class="form-check-input" type="checkbox" name="purchasecheck" id="purchasecheck" onchange="purchaseCheckboxChanged()">
+                    <div id="purchasedata">
+                        <label for="car" class="mt-1"><b>Select purchased car: </b></label>
+                        <select name="car" id="car" class="form-select" required>
+                            {% for car in cars %}
+                                <option selected value={{car.id}}>{{car}}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="purchasedate" class="mt-1"><b>Select purchase date: </b></label>
+                        <input class="date-own form-control" type="text" name="purchasedate" id="purchasedate">
+                    </div>
+                    <button class="btn btn-primary mt-2" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+
     </body>
+
 </html>

@@ -9,9 +9,83 @@
 
     <body>
 
-    <!--Add a nav bar here -->
+        <nav class="navbar navbar-light bg-light">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Best cars dealership</a>
+                    <a class="btn btn-link" href="about">About us</a>
+                    <a class="btn btn-link" href="contact">Contact us</a>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        {% if user.is_authenticated %}
+                            <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
+                            <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
+                        {% else %}
+                            <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+                                {% csrf_token %}
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Username" name="username" >
+                                    <input type="password" class="form-control" placeholder="Password" name="psw" >
+                                    <button class="btn btn-primary" type="submit">Login</button>
+                                    <a class="btn btn-link" href="{% url 'djangoapp:register' %}">Sign Up</a>
+                                </div>
+                            </form>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
-    <!-- Add reviews as cards -->
+        {% if dealer_result != "ok" %}     
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true" style="font-size:20px">×</span>
+                </button>
+                <strong>Dealer details request failed!</strong> {{dealer_result}}
+            </div>
+        {% else %}
+            <h2  class="mt-3 ml-4 mr-4">Reviews from {{ dealer.full_name }}</h2>
+            {% if review_result != "ok"  %}
+                {% if review_result == "No reviews from this dealer on database"  %}
+                    <div class="alert alert-warning">
+                        {{review_result}}
+                    </div>
+                {% else %}
+                    <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true" style="font-size:20px">×</span>
+                        </button>
+                        <strong>Dealer details request failed!</strong> {{review_result}}
+                    </div>
+                {% endif %}
+            {% elif reviews %}
+                <div class="container m-2">
+                    <div class="card-deck">
+                        {% for review in reviews %}
+                            <div class="card m-3 p-3 bg-light">
+                                {% if  review.sentiment == "positive" %}
+                                    <img class="card-img-left w-25" src="{{MEDIA_URL}}emoji/positive.png">
+                                {% elif review.sentiment == "neutral"%}
+                                    <img class="card-img-left w-25" src="{{MEDIA_URL}}emoji/neutral.png">
+                                {% else %}
+                                    <img class="card-img-left w-25" src="{{MEDIA_URL}}emoji/negative.png">
+                                {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card_title"> {{ review.name }}  </h5>
+                                        {% if  review.purchase %}
+                                            <h6 class="card_title"> {{ review.car_make }} {{ review.car_model }} {{ review.car_year }}</h6>
+                                        {% else %}
+                                            <h6 class="card_title">Without purchase</h6>
+                                        {% endif %}
+                                        <p class="card-text">{{ review.review }}</p>
+                                    </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
 
     </body>
 

@@ -101,37 +101,44 @@ def get_dealerships(request):
         # Add dealerships and result to the context
         context["dealerships"] = dealerships
         context["result"] = result
+        # Render template
         return render(request, 'djangoapp/index.html', context)
 
 # Create a `get_dealer_details` view to render the reviews of a dealer
 def get_dealer_details(request, dealer_id):
     if request.method == "GET":
+        # Create context
+        context=dict()
+        # Get URLs for managing dealers and reviews
         url = "https://8ce99a88.eu-gb.apigw.appdomain.cloud"
         dealer_url = url + "/api/dealership"
         review_url = url + "/api/review"
-        # Set response
-        response = ""
-        # Get reviews from the URL
+        # Get dealer details from the URL and add result to the context
         dealer, dealer_status = get_dealer_by_id(dealer_url, dealer_id)
-        if dealer_status == "ok":
-            # Concat all dealer's short name
-            response += dealer.short_name + " " + dealer.id + '<br><br>'
-        else:
-            # Return error
-            return HttpResponse(dealer_status)
+        context["dealer"]=dealer
+        context["dealer_result"]=dealer_status
+        # Get review list for dealer from the URL and add result to the context
         reviews, review_status = get_dealer_reviews_from_cf(review_url, dealer_id)
-        if review_status == "ok":
-            # Concat all reviews's info
-            response += '<br> '.join([(review.name + ": " + review.review + "(" + review.sentiment + ")") for review in reviews])
-        else:
-            # Return error
-            return HttpResponse(review_status) 
-        # Return a Info gathered
-        return HttpResponse(response)
+        context["reviews"]=reviews
+        context["review_result"]=review_status
+        # Render template
+        return render(request, 'djangoapp/dealer_details.html', context)
 
 
 # Create a `add_review` view to submit a review
 def add_review(request, dealer_id):
+    if request.method == "GET":
+        # Create context
+        context=dict()
+        # Get URLs for managing dealers and reviews
+        url = "https://8ce99a88.eu-gb.apigw.appdomain.cloud"
+        dealer_url = url + "/api/dealership"
+        review_url = url + "/api/review"
+        # Get dealer details from the URL and add result to the context
+        dealer, dealer_status = get_dealer_by_id(dealer_url, dealer_id)
+        context["dealer"]=dealer
+        context["dealer_result"]=dealer_status
+    elif request.method == "POST":
     if request.user.is_authenticated:
         url = "https://8ce99a88.eu-gb.apigw.appdomain.cloud/api/review"
         review = dict()
