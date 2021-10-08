@@ -130,27 +130,55 @@ def add_review(request, dealer_id):
     if request.method == "GET":
         # Create context
         context=dict()
-        # Get URLs for managing dealers and reviews
-        url = "https://8ce99a88.eu-gb.apigw.appdomain.cloud"
-        dealer_url = url + "/api/dealership"
-        review_url = url + "/api/review"
+        # Get URLs for managing dealers
+        url = "https://8ce99a88.eu-gb.apigw.appdomain.cloud/api/dealership"
         # Get dealer details from the URL and add result to the context
-        dealer, dealer_status = get_dealer_by_id(dealer_url, dealer_id)
+        dealer, dealer_status = get_dealer_by_id(url, dealer_id)
         context["dealer"]=dealer
-        context["dealer_result"]=dealer_status
+        context["result"]=dealer_status
+        # Get cars available at dealer and add result to the context
+        cars= CarModel.objects.all().filter(dealer_id=dealer_id)
+        context['cars'] = cars
+        # Render template
+        return render(request, 'djangoapp/add_review.html', context)   
     elif request.method == "POST":
-    if request.user.is_authenticated:
-        url = "https://8ce99a88.eu-gb.apigw.appdomain.cloud/api/review"
-        review = dict()
-        review["name"] = "Adrián Rejas"
-        review["dealership"] = dealer_id
-        review["review"] = "This is a great car dealer"
-        review["purchase"] = False
-        json_payload = dict()
-        json_payload["review"] = review
-        result = post_request(url, json_payload, dealerId=dealer_id)
-        return HttpResponse(result) 
-    else:
-        return HttpResponse("User not authenticated") 
+        if request.user.is_authenticated:
+            url = "https://8ce99a88.eu-gb.apigw.appdomain.cloud/api/review"
+            review = dict()
+            review["name"] = request.user.username
+            review["dealership"] = dealer_id
+            review["review"] = request.POST["content"]
+            review["purchase"] = request.POST.get('purchasecheck', False)
+            car_id = request.POST.get("car", None)
+            if car_id != None:
+                car = CarModel.objects.get(id=car_id)
+                review["car_make"] = car.car_make.name
+                review["car_model"] = car.name
+                review["car_year"] = car.yearpublished()
+                review["purchase_date"] = datetime.utcnow().isoformat()
+            json_payload = dict()
+            json_payload["review"] = review
+            result = post_request(url, json_payload, dealerId=dealer_id)
+            if (result["ok"]):
+                return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
+            else:
+                context=dict()
+                context["error"] = result["message"]
+                return render(request, 'djangoapp/add_review.html', context)  
+        else:
+            # Create context
+            context=dict()
+            # Add user not authenticated error
+            context["error"] = "User is not authenticated"
+            # Get URLs for managing dealers
+            url = "https://8ce99a88.eu-gb.apigw.appdomain.cloud/api/dealership"
+            # Get dealer details from the URL and add result to the context
+            dealer, dealer_status = get_dealer_by_id(url, dealer_id)
+            context["dealer"]=dealer
+            context["result"]=dealer_status
+            # Get cars available at dealer and add result to the context
+            cars= CarModel.objects.all().filter(dealer_id=dealer_id)
+            # Render template
+            return render(request, 'djangoapp/add_review.html', context)   
 
 

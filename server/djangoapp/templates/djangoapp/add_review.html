@@ -13,7 +13,12 @@
 
     <body>
 
-        <script>
+        <script type="text/javascript">
+
+            $('.date-own').datepicker({
+                format: 'mm/dd/yyyy'
+            });
+
             function purchaseCheckboxChanged()
             {
                 if($('#purchasecheck').is(":checked"))   
@@ -21,6 +26,7 @@
                 else
                     $("#purchasedata").hide();
             }
+
         </script>
         
         <nav class="navbar navbar-light bg-light">
@@ -51,8 +57,21 @@
             </div>
         </nav>
         
+        {% if error %}     
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true" style="font-size:20px">×</span>
+                </button>
+                <strong>Post review failed!</strong> {{error}}
+            </div>
+        {% endif %}
+
         <button> <a href="{% url 'djangoapp:dealer_details' dealer_id=dealer_id %}" ><h5>Back to reviews</h5> </a> </button>
-        <h2  class="mt-5 ml-5 mr-5">Add review about {{ dealer.full_name }}</h2>
+        {% if result == "ok"  %}
+            <h2  class="mt-5 ml-5 mr-5">Add review about {{ dealer.full_name }}</h2>
+        {% else %}
+            <h2  class="mt-5 ml-5 mr-5">Add review</h2>
+        {% endif %}
         
         <form action="{% url 'djangoapp:add_review' dealer_id%}" method="post">
             <div class="container m-5"> 
