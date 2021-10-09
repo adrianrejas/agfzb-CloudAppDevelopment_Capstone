@@ -7,7 +7,7 @@ from django.utils.timezone import now
 # - Any other fields you would like to include in car make model
 # - __str__ method to print a car make object
 class CarMake(models.Model):
-    name = models.CharField(null=False, max_length=30, default='undefined')
+    name = models.CharField(null=False, max_length=40, default='undefined')
     description = models.TextField(null=True)
     def __str__(self):
         return self.name + ": " + self.description
@@ -25,8 +25,8 @@ class CarModel(models.Model):
     # Dealer ID has been defined as a string both here and in the IBM clodclud functions
     # This has been a deliberate change in order to take advantage of the autogeneration of IDs
     # done by Cloudant database
-    dealer_id = models.CharField(null=False, max_length=30, default='undefined')
-    name = models.CharField(null=False, max_length=30, default='undefined')
+    dealer_id = models.CharField(null=False, max_length=40, default='undefined')
+    name = models.CharField(null=False, max_length=40, default='undefined')
     COUPE = 'Coupe'
     SEDAN = 'Sedan'
     SPORTS = 'Sports'

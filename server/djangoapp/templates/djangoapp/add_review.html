@@ -62,15 +62,16 @@
             </div>
         {% endif %}
 
-        <button> <a href="{% url 'djangoapp:dealer_details' dealer_id=dealer.id %}" ><h5>Back to reviews</h5> </a> </button>
+        <button class="mt-5 ml-5 mr-5"> <a href="{% url 'djangoapp:dealer_details' dealer_id=dealer.id %}" ><h5>Back to reviews</h5> </a> </button>
         {% if result == "ok"  %}
-            <h2  class="mt-5 ml-5 mr-5">Add review about {{ dealer.full_name }}</h2>
+            <h2 class="mt-2 ml-5 mr-5">Add review about {{ dealer.full_name }}</h2>
         {% else %}
-            <h2  class="mt-5 ml-5 mr-5">Add review</h2>
+            <h2 class="mt-2 ml-5 mr-5">Add review</h2>
         {% endif %}
         
         <form action="{% url 'djangoapp:add_review' dealer.id%}" method="post">
-            <div class="container m-5"> 
+            {% csrf_token %}
+            <div class="container" style="margin: 2rem!important;"> 
                 <div class="form-group mt-2">
                     <label for="content" class="mt-1"><b>Write review content:</b></label>
                     <textarea class="form-control" id="content" name="content" rows="2" required></textarea>
