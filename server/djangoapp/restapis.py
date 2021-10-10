@@ -9,8 +9,8 @@ from requests.auth import HTTPBasicAuth
 # e.g., response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
 #                                     auth=HTTPBasicAuth('apikey', api_key))
 def get_request(url, api_key, **kwargs):
-    print(kwargs)
     print("GET from {} ".format(url))
+    print(kwargs)
     try:
         if api_key is not None:
             response = requests.get(url, headers={'Content-Type': 'application/json'},
@@ -28,8 +28,15 @@ def get_request(url, api_key, **kwargs):
 
 # Create a `post_request` to make HTTP POST requests
 def post_request(url, json_payload, **kwargs):
-    response = requests.post(url, params=kwargs, json=json_payload)
-    return response
+    print("POST to {} ".format(url))
+    print(kwargs)
+    print(json_payload)
+    response = requests.post(url,  headers={'Content-Type': 'application/json'},
+            params=kwargs, json=json_payload)
+    status_code = response.status_code
+    print("With status {} ".format(status_code))
+    json_data = json.loads(response.text)
+    return json_data, status_code
 
 # Create a get_dealers_from_cf method to get dealers from a cloud function
 # def get_dealers_from_cf(url, **kwargs):
