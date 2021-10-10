@@ -13,8 +13,8 @@
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Best cars dealership</a>
-                    <a class="btn btn-link" href="about">About us</a>
-                    <a class="btn btn-link" href="contact">Contact us</a>
+                    <a class="btn btn-link" href="{% url 'djangoapp:about' %}">About us</a>
+                    <a class="btn btn-link" href="{% url 'djangoapp:contact' %}">Contact us</a>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
@@ -87,7 +87,9 @@
             {% endif %}
         {% endif %}
 
-        <button class="m-4"> <a href="{% url 'djangoapp:add_review' dealer_id=dealer.id %}" ><h5>Add review</h5> </a> </button>
+        {% if user.is_authenticated %}
+            <button class="m-4"> <a href="{% url 'djangoapp:add_review' dealer_id=dealer.id %}" ><h5>Add review</h5> </a> </button>
+        {% endif %}
 
     </body>
 

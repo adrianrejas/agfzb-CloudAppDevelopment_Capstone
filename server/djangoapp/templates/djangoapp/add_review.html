@@ -29,8 +29,8 @@
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Best cars dealership</a>
-                    <a class="btn btn-link" href="about">About us</a>
-                    <a class="btn btn-link" href="contact">Contact us</a>
+                    <a class="btn btn-link" href="{% url 'djangoapp:about' %}">About us</a>
+                    <a class="btn btn-link" href="{% url 'djangoapp:contact' %}">Contact us</a>
                     </div>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
@@ -79,7 +79,7 @@
                     <input class="form-check-input ml-1" type="checkbox" name="purchasecheck" id="purchasecheck" onchange="purchaseCheckboxChanged()" style="margin-top: 0.65rem!important;">
                     <div id="purchasedata" style="display: none;">
                         <label for="car" class="mt-1"><b>Select purchased car: </b></label>
-                        <select name="car" id="car" class="form-select" required>
+                        <select name="car" id="car" class="form-select">
                             {% for car in cars %}
                                 <option selected value={{car.id}}>{{car}}</option>
                             {% endfor %}
