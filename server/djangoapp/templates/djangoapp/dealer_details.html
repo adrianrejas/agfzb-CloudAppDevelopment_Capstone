@@ -63,7 +63,7 @@
                 <div class="container m-2">
                     <div class="card-deck">
                         {% for review in reviews %}
-                            <div class="card m-3 p-3 bg-light">
+                            <div class="card m-3 p-3 bg-light" style="min-width: 18rem!important; max-width: 18rem!important">
                                 {% if  review.sentiment == "positive" %}
                                     <img class="card-img-left w-25" src="{{MEDIA_URL}}emoji/positive.png">
                                 {% elif review.sentiment == "neutral"%}
